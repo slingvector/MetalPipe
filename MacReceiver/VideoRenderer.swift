@@ -2,10 +2,9 @@
 //  VideoRenderer.swift
 //  MacReceiver
 //
-//  Renders NV12 CVPixelBuffers into an MTKView with zero copies:
-//  CVMetalTextureCache maps the decoder's IOSurface planes directly
-//  to Metal textures, and a tiny fragment shader does BT.709 YUV→RGB.
-//  This window is what OBS captures.
+//  v1.1: rotation-aware rendering. The pixels arrive in ReplayKit's
+//  fixed buffer orientation; we rotate at draw time by remapping the
+//  quad's texture coordinates in the vertex shader — zero extra cost.
 //
 
 import SwiftUI
@@ -24,15 +23,15 @@ struct MetalVideoView: NSViewRepresentable {
         view.device = MTLCreateSystemDefaultDevice()
         view.colorPixelFormat = .bgra8Unorm
         view.framebufferOnly = true
-        view.isPaused = true                 // we drive draws ourselves
+        view.isPaused = true
         view.enableSetNeedsDisplay = true
 
         let renderer = VideoRenderer(view: view)
         view.delegate = renderer
         context.coordinator.renderer = renderer
 
-        pipeline.onFrame = { [weak renderer, weak view] pixelBuffer in
-            renderer?.latestFrame = pixelBuffer
+        pipeline.onFrame = { [weak renderer, weak view] pixelBuffer, rotation in
+            renderer?.setLatest(frame: pixelBuffer, rotation: rotation)
             DispatchQueue.main.async { view?.needsDisplay = true }
         }
         return view
@@ -49,15 +48,22 @@ struct MetalVideoView: NSViewRepresentable {
 
 final class VideoRenderer: NSObject, MTKViewDelegate {
 
-    /// Most recent decoded frame. Written by the decoder thread,
-    /// read in draw(in:). A lock keeps the handoff clean; we only
-    /// ever keep ONE frame alive.
-    var latestFrame: CVPixelBuffer? {
-        get { lock.lock(); defer { lock.unlock() }; return _latestFrame }
-        set { lock.lock(); _latestFrame = newValue; lock.unlock() }
-    }
     private var _latestFrame: CVPixelBuffer?
+    private var _latestRotation: UInt8 = 0
     private let lock = NSLock()
+
+    func setLatest(frame: CVPixelBuffer, rotation: UInt8) {
+        lock.lock()
+        _latestFrame = frame
+        _latestRotation = rotation
+        lock.unlock()
+    }
+
+    private func latest() -> (CVPixelBuffer, UInt8)? {
+        lock.lock(); defer { lock.unlock() }
+        guard let f = _latestFrame else { return nil }
+        return (f, _latestRotation)
+    }
 
     private let device: MTLDevice
     private let commandQueue: MTLCommandQueue
@@ -89,7 +95,7 @@ final class VideoRenderer: NSObject, MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
 
     func draw(in view: MTKView) {
-        guard let pixelBuffer = latestFrame,
+        guard let (pixelBuffer, rotationByte) = latest(),
               let pipelineState,
               let textureCache,
               let drawable = view.currentDrawable,
@@ -101,10 +107,13 @@ final class VideoRenderer: NSObject, MTKViewDelegate {
               let cbcrTexture = makeTexture(pixelBuffer, cache: textureCache,
                                             plane: 1, format: .rg8Unorm) else { return }
 
-        // Aspect-fit scale: shrink the quad on one axis so the video
-        // letterboxes instead of stretching.
-        let videoAspect = Float(CVPixelBufferGetWidth(pixelBuffer))
-                        / Float(CVPixelBufferGetHeight(pixelBuffer))
+        // Aspect fit. For 90°/270° the displayed image is the buffer
+        // turned sideways, so its on-screen aspect is height/width.
+        let bufferW = Float(CVPixelBufferGetWidth(pixelBuffer))
+        let bufferH = Float(CVPixelBufferGetHeight(pixelBuffer))
+        let rotated = (rotationByte == 1 || rotationByte == 3)
+        let videoAspect = rotated ? bufferH / bufferW : bufferW / bufferH
+
         let drawableAspect = Float(view.drawableSize.width)
                            / Float(view.drawableSize.height)
         var scale = SIMD2<Float>(1, 1)
@@ -114,11 +123,14 @@ final class VideoRenderer: NSObject, MTKViewDelegate {
             scale.x = videoAspect / drawableAspect
         }
 
+        var rotation = UInt32(rotationByte)
+
         guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPass)
         else { return }
 
         encoder.setRenderPipelineState(pipelineState)
         encoder.setVertexBytes(&scale, length: MemoryLayout<SIMD2<Float>>.size, index: 0)
+        encoder.setVertexBytes(&rotation, length: MemoryLayout<UInt32>.size, index: 1)
         encoder.setFragmentTexture(yTexture, index: 0)
         encoder.setFragmentTexture(cbcrTexture, index: 1)
         encoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)

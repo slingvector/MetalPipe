@@ -2,14 +2,9 @@
 //  VideoDecoder.swift
 //  MacReceiver
 //
-//  VTDecompressionSession wrapper with one core policy:
-//
-//      New parameter sets that the current session can't accept
-//      ⇒ tear the session down and build a fresh one.
-//
-//  This is the fix for the classic "second broadcast session shows a
-//  frozen/black picture" bug: the old session was still configured
-//  for the previous stream's format and silently rejected frames.
+//  v1.1: decoded frames are delivered together with their display
+//  rotation (read from the wire, originally from ReplayKit's
+//  per-frame orientation tag).
 //
 
 import Foundation
@@ -18,8 +13,8 @@ import VideoToolbox
 
 final class VideoDecoder {
 
-    /// Decoded frames, delivered on the decoder's callback thread.
-    var onFrame: ((CVPixelBuffer) -> Void)?
+    /// (pixelBuffer, rotation) — rotation is quarter-turns clockwise.
+    var onFrame: ((CVPixelBuffer, UInt8) -> Void)?
 
     private var session: VTDecompressionSession?
     private var formatDescription: CMVideoFormatDescription?
@@ -27,8 +22,6 @@ final class VideoDecoder {
 
     // MARK: Session control
 
-    /// Called on `sessionStart` and on watchdog reset.
-    /// After this, nothing decodes until new parameter sets arrive.
     func reset() {
         if let session { VTDecompressionSessionInvalidate(session) }
         session = nil
@@ -40,14 +33,12 @@ final class VideoDecoder {
         guard sets.count >= 2,
               let newFD = Self.makeFormatDescription(sets: sets) else { return }
 
-        // Same format and a live session that accepts it? Keep going.
         if let session, let oldFD = formatDescription,
            CMFormatDescriptionEqual(newFD, otherFormatDescription: oldFD),
            VTDecompressionSessionCanAcceptFormatDescription(session, formatDescription: newFD) {
             return
         }
 
-        // Anything else: rebuild from scratch.
         reset()
         formatDescription = newFD
 
@@ -74,8 +65,6 @@ final class VideoDecoder {
     func decode(_ frame: Packetizer.Frame) {
         guard let session, let formatDescription else { return }
 
-        // Never feed delta frames before the first keyframe of a
-        // (re)started session — decoders hate that.
         if !hasSeenKeyframe {
             guard frame.isKeyframe else { return }
             hasSeenKeyframe = true
@@ -86,6 +75,7 @@ final class VideoDecoder {
             pts: frame.pts,
             formatDescription: formatDescription) else { return }
 
+        let rotation = frame.rotation
         let flags: VTDecodeFrameFlags = [._EnableAsynchronousDecompression]
         VTDecompressionSessionDecodeFrame(
             session,
@@ -93,19 +83,17 @@ final class VideoDecoder {
             flags: flags,
             infoFlagsOut: nil) { [weak self] status, _, imageBuffer, _, _ in
                 if status == kVTInvalidSessionErr {
-                    // e.g. Mac slept and woke. Rebuild on next keyframe.
                     self?.reset()
                     return
                 }
                 guard status == noErr, let pixelBuffer = imageBuffer else { return }
-                self?.onFrame?(pixelBuffer)
+                self?.onFrame?(pixelBuffer, rotation)
             }
     }
 
     // MARK: Construction helpers
 
     private static func makeFormatDescription(sets: [Data]) -> CMVideoFormatDescription? {
-        // Copy each set into stable heap memory for the C call.
         let buffers: [UnsafeMutablePointer<UInt8>] = sets.map { data in
             let ptr = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
             data.copyBytes(to: ptr, count: data.count)
@@ -122,7 +110,7 @@ final class VideoDecoder {
             parameterSetCount: pointers.count,
             parameterSetPointers: &pointers,
             parameterSetSizes: &sizes,
-            nalUnitHeaderLength: 4,        // AVCC with 4-byte length prefixes
+            nalUnitHeaderLength: 4,
             formatDescriptionOut: &fd)
 
         return status == noErr ? fd : nil

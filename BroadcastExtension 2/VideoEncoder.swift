@@ -7,10 +7,12 @@
 //
 //   1. No Metal, no pixel buffer copies. The IOSurface goes straight
 //      from ReplayKit into the hardware encoder.
-//   2. Realtime mode, no frame reordering (no B-frames) — minimal
-//      internal buffering and minimal latency.
-//   3. Parameter sets are re-sent on EVERY keyframe so the receiver
-//      can always rebuild its decoder from scratch.
+//   2. Realtime mode, no frame reordering (no B-frames).
+//   3. Parameter sets re-sent on EVERY keyframe.
+//
+//  v1.1: rotation rides along with each frame. We deliberately do NOT
+//  rotate pixels here — that would cost CPU/memory the extension
+//  doesn't have. The Mac rotates for free in its shader.
 //
 
 import Foundation
@@ -21,18 +23,16 @@ final class VideoEncoder {
 
     private var session: VTCompressionSession?
     private let onParameterSets: ([Data]) -> Void
-    /// (avccData, ptsSeconds, isKeyframe)
-    private let onEncodedFrame: (Data, Double, Bool) -> Void
+    /// (avccData, ptsSeconds, isKeyframe, rotation)
+    private let onEncodedFrame: (Data, Double, Bool, UInt8) -> Void
 
-    /// Set when the connection (re)becomes ready so the receiver
-    /// gets a decodable frame immediately.
     private var forceKeyframeOnNext = false
     private let lock = NSLock()
 
     init?(width: Int32,
           height: Int32,
           onParameterSets: @escaping ([Data]) -> Void,
-          onEncodedFrame: @escaping (Data, Double, Bool) -> Void) {
+          onEncodedFrame: @escaping (Data, Double, Bool, UInt8) -> Void) {
 
         self.onParameterSets = onParameterSets
         self.onEncodedFrame = onEncodedFrame
@@ -73,7 +73,8 @@ final class VideoEncoder {
         lock.lock(); forceKeyframeOnNext = true; lock.unlock()
     }
 
-    func encode(_ sampleBuffer: CMSampleBuffer) {
+    /// `rotation`: quarter-turns clockwise the receiver must apply (0...3).
+    func encode(_ sampleBuffer: CMSampleBuffer, rotation: UInt8) {
         guard let session,
               let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
@@ -96,12 +97,12 @@ final class VideoEncoder {
             frameProperties: frameProperties,
             infoFlagsOut: nil) { [weak self] status, _, encodedBuffer in
                 guard status == noErr, let encodedBuffer, let self else { return }
-                self.handleEncoded(encodedBuffer)
+                // `rotation` is captured per-frame by this closure.
+                self.handleEncoded(encodedBuffer, rotation: rotation)
             }
     }
 
-    private func handleEncoded(_ sb: CMSampleBuffer) {
-        // Keyframe detection: a frame is sync unless NotSync is set.
+    private func handleEncoded(_ sb: CMSampleBuffer, rotation: UInt8) {
         var isKeyframe = true
         if let attachments = CMSampleBufferGetSampleAttachmentsArray(sb, createIfNecessary: false)
             as? [[CFString: Any]],
@@ -118,9 +119,6 @@ final class VideoEncoder {
         let length = CMBlockBufferGetDataLength(blockBuffer)
         guard length > 0 else { return }
 
-        // Copy out of the block buffer (may be non-contiguous).
-        // This is the ONLY copy in the extension, and it's compressed
-        // data (~50KB typical), not raw frames (~6MB).
         var data = Data(count: length)
         let copyStatus = data.withUnsafeMutableBytes { rawBuffer -> OSStatus in
             guard let base = rawBuffer.baseAddress else { return -1 }
@@ -132,7 +130,7 @@ final class VideoEncoder {
         guard copyStatus == noErr else { return }
 
         let pts = CMTimeGetSeconds(CMSampleBufferGetPresentationTimeStamp(sb))
-        onEncodedFrame(data, pts, isKeyframe)
+        onEncodedFrame(data, pts, isKeyframe, rotation)
     }
 
     private static func extractParameterSets(from fd: CMFormatDescription) -> [Data] {
@@ -167,3 +165,4 @@ final class VideoEncoder {
 
     deinit { invalidate() }
 }
+

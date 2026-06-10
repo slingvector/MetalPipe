@@ -2,43 +2,34 @@
 //  SampleHandler.swift
 //  BroadcastExtension
 //
-//  The ReplayKit entry point. Total responsibilities:
-//
-//    sample buffer in → hardware encode → packetize → socket out
-//
-//  Everything else (Metal, preview, UI) lives on the Mac. The rules:
-//
-//   - processSampleBuffer returns FAST. No queues of raw frames, ever.
-//     One retained iPad frame ≈ 6MB IOSurface; four of them is 25% of
-//     our entire memory budget.
-//   - Frames are dropped (not buffered) when the network or memory
-//     can't keep up.
-//   - broadcastFinished tears down EVERYTHING. Combined with the
-//     receiver's sessionStart reset, no state survives between runs.
+//  v1.1: reads RPVideoSampleOrientationKey from each sample buffer.
+//  ReplayKit does NOT rotate pixels when the iPad rotates — it keeps
+//  the buffer in a fixed orientation and tags each frame with how it
+//  should be displayed. We forward that tag to the Mac, which rotates
+//  on the GPU for free.
 //
 
 import ReplayKit
 import CoreMedia
+import ImageIO
 
 class SampleHandler: RPBroadcastSampleHandler {
 
     private let sender = StreamSender()
     private var encoder: VideoEncoder?
     private var frameCounter = 0
-    private var shedDeltaFrames = false   // set under memory pressure
+    private var shedDeltaFrames = false
 
     // MARK: Broadcast lifecycle
 
     override func broadcastStarted(withSetupInfo setupInfo: [String: NSObject]?) {
         sender.onReady = { [weak self] in
-            // Fresh connection: receiver has no decoder state yet,
-            // so the very next frame must be a keyframe.
             self?.encoder?.requestKeyframe()
         }
         sender.start()
     }
 
-    override func broadcastPaused() { /* nothing buffered, nothing to do */ }
+    override func broadcastPaused() {}
 
     override func broadcastResumed() {
         encoder?.requestKeyframe()
@@ -54,11 +45,9 @@ class SampleHandler: RPBroadcastSampleHandler {
 
     override func processSampleBuffer(_ sampleBuffer: CMSampleBuffer,
                                       with sampleBufferType: RPSampleBufferType) {
-        guard sampleBufferType == .video else { return } // audio: out of scope for v1
+        guard sampleBufferType == .video else { return }
 
         autoreleasepool {
-            // Don't even encode if nobody is listening — keeps the
-            // extension near-idle while the Mac app isn't running.
             guard sender.state == .ready else { return }
 
             if encoder == nil {
@@ -67,17 +56,13 @@ class SampleHandler: RPBroadcastSampleHandler {
 
             frameCounter += 1
 
-            // Memory check every ~2 seconds of video.
             if frameCounter % 60 == 0 {
                 switch MemoryGuard.pressure() {
                 case .ok:
                     shedDeltaFrames = false
                 case .soft:
-                    // Degrade gracefully: halve the frame rate.
                     shedDeltaFrames = true
                 case .hard:
-                    // Better to end cleanly than be jetsam-killed with
-                    // no explanation (the old "got stuck" failure).
                     let error = NSError(
                         domain: "MetalPipe", code: 1,
                         userInfo: [NSLocalizedDescriptionKey:
@@ -89,7 +74,33 @@ class SampleHandler: RPBroadcastSampleHandler {
 
             if shedDeltaFrames && frameCounter % 2 == 0 { return }
 
-            encoder?.encode(sampleBuffer)
+            encoder?.encode(sampleBuffer, rotation: Self.rotation(of: sampleBuffer))
+        }
+    }
+
+    // MARK: Orientation
+
+    /// Maps ReplayKit's per-frame orientation tag to the number of
+    /// 90° clockwise turns the receiver must apply.
+    ///
+    /// NOTE: if you ever see the image rotated the WRONG way (90° off
+    /// in the opposite direction), swap the return values for the
+    /// .left and .right cases — the EXIF conventions here are the
+    /// single most commonly inverted thing in all of iOS development.
+    private static func rotation(of sampleBuffer: CMSampleBuffer) -> UInt8 {
+        guard let attachment = CMGetAttachment(
+                sampleBuffer,
+                key: RPVideoSampleOrientationKey as CFString,
+                attachmentModeOut: nil) as? NSNumber,
+              let orientation = CGImagePropertyOrientation(rawValue: attachment.uint32Value)
+        else { return 0 }
+
+        switch orientation {
+        case .up, .upMirrored:       return 0
+        case .right, .rightMirrored: return 3   // needs 270° CW (90° CCW)
+        case .down, .downMirrored:   return 2   // needs 180°
+        case .left, .leftMirrored:   return 1   // needs 90° CW
+        @unknown default:            return 0
         }
     }
 
@@ -107,9 +118,10 @@ class SampleHandler: RPBroadcastSampleHandler {
                 self?.sender.send(Packetizer.packet(type: .parameterSets, payload: payload),
                                   droppable: false)
             },
-            onEncodedFrame: { [weak self] data, pts, isKeyframe in
+            onEncodedFrame: { [weak self] data, pts, isKeyframe, rotation in
                 let payload = Packetizer.framePayload(pts: pts,
                                                       isKeyframe: isKeyframe,
+                                                      rotation: rotation,
                                                       avccData: data)
                 self?.sender.send(Packetizer.packet(type: .videoFrame, payload: payload),
                                   droppable: !isKeyframe)

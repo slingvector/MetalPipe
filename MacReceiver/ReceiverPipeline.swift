@@ -2,12 +2,7 @@
 //  ReceiverPipeline.swift
 //  MacReceiver
 //
-//  Wires listener → depacketized packets → decoder → renderer, and
-//  owns the watchdog: if the sender goes silent (iPad locked, Wi-Fi
-//  drop, extension killed), we cancel the connection and reset the
-//  decoder so the NEXT session starts perfectly clean. The old
-//  project's "worked a few times then stuck" pattern is exactly what
-//  happens when this reset path doesn't exist.
+//  v1.1: frame callback now includes display rotation.
 //
 
 import Foundation
@@ -20,9 +15,8 @@ final class ReceiverPipeline: ObservableObject {
     @Published var statusText = "Waiting for iPad…"
     @Published var fps = 0
 
-    /// Latest decoded frame for the renderer. Set on a background
-    /// thread; the renderer reads it on the main/draw thread.
-    var onFrame: ((CVPixelBuffer) -> Void)?
+    /// (pixelBuffer, rotation) — rotation is quarter-turns clockwise.
+    var onFrame: ((CVPixelBuffer, UInt8) -> Void)?
 
     private let listener = StreamListener()
     private let decoder = VideoDecoder()
@@ -33,9 +27,9 @@ final class ReceiverPipeline: ObservableObject {
     private var fpsWindowStart = Date()
 
     func start() {
-        decoder.onFrame = { [weak self] pixelBuffer in
+        decoder.onFrame = { [weak self] pixelBuffer, rotation in
             guard let self else { return }
-            self.onFrame?(pixelBuffer)
+            self.onFrame?(pixelBuffer, rotation)
             self.tickFPS()
         }
 
@@ -70,7 +64,6 @@ final class ReceiverPipeline: ObservableObject {
 
         switch type {
         case .sessionStart:
-            // Fresh broadcast session: forget everything.
             decoder.reset()
 
         case .parameterSets:
@@ -96,7 +89,7 @@ final class ReceiverPipeline: ObservableObject {
             guard let self, self.isConnected else { return }
             if Date().timeIntervalSince(self.lastPacketDate) > MetalPipeConfig.watchdogTimeout {
                 self.statusText = "Sender silent — resetting…"
-                self.listener.dropConnection()   // triggers onConnectionChange(false)
+                self.listener.dropConnection()
             }
         }
     }

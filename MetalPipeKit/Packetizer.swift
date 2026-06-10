@@ -5,6 +5,10 @@
 //  Builds outgoing packets (sender) and parses payloads (receiver).
 //  Pure functions, no state, trivially testable.
 //
+//  v1.1: frame flags byte now carries display rotation in bits 1-2:
+//        bit 0      = keyframe
+//        bits 1-2   = rotation (0 = 0°, 1 = 90° CW, 2 = 180°, 3 = 270° CW)
+//
 
 import Foundation
 
@@ -31,10 +35,15 @@ public enum Packetizer {
         return d
     }
 
-    public static func framePayload(pts: Double, isKeyframe: Bool, avccData: Data) -> Data {
+    public static func framePayload(pts: Double,
+                                    isKeyframe: Bool,
+                                    rotation: UInt8,
+                                    avccData: Data) -> Data {
+        var flags: UInt8 = isKeyframe ? 0x01 : 0x00
+        flags |= (rotation & 0x03) << 1
         var d = Data(capacity: 9 + avccData.count)
         d.appendBE64(pts.bitPattern)
-        d.append(isKeyframe ? 0x01 : 0x00)
+        d.append(flags)
         d.append(avccData)
         return d
     }
@@ -60,6 +69,8 @@ public enum Packetizer {
     public struct Frame {
         public let pts: Double
         public let isKeyframe: Bool
+        /// Quarter-turns clockwise the receiver must apply: 0...3
+        public let rotation: UInt8
         public let avccData: Data
     }
 
@@ -70,6 +81,7 @@ public enum Packetizer {
         let start = payload.startIndex + 9
         return Frame(pts: Double(bitPattern: bits),
                      isKeyframe: flags & 0x01 != 0,
+                     rotation: (flags >> 1) & 0x03,
                      avccData: Data(payload[start...]))
     }
 }
