@@ -6,14 +6,117 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		82666EA12FD9872500CA81DB /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82666EA02FD9872400CA81DB /* ReplayKit.framework */; };
+		82666EA82FD9872500CA81DB /* BroadcastExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 82666E9E2FD9872400CA81DB /* BroadcastExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		82666EB32FD98C7500CA81DB /* MetalPipeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666EAF2FD98C7400CA81DB /* MetalPipeConfig.swift */; };
+		82666EB42FD98C7500CA81DB /* Depacketizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666EAE2FD98C7400CA81DB /* Depacketizer.swift */; };
+		82666EB52FD98C7500CA81DB /* Packetizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666EB02FD98C7400CA81DB /* Packetizer.swift */; };
+		82666EB62FD98C7500CA81DB /* WireProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666EB12FD98C7400CA81DB /* WireProtocol.swift */; };
+		82666EB72FD98C7500CA81DB /* MetalPipeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666EAF2FD98C7400CA81DB /* MetalPipeConfig.swift */; };
+		82666EB82FD98C7500CA81DB /* Depacketizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666EAE2FD98C7400CA81DB /* Depacketizer.swift */; };
+		82666EB92FD98C7500CA81DB /* Packetizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666EB02FD98C7400CA81DB /* Packetizer.swift */; };
+		82666EBA2FD98C7500CA81DB /* WireProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666EB12FD98C7400CA81DB /* WireProtocol.swift */; };
+		82666EBB2FD98C7500CA81DB /* MetalPipeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666EAF2FD98C7400CA81DB /* MetalPipeConfig.swift */; };
+		82666EBC2FD98C7500CA81DB /* Depacketizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666EAE2FD98C7400CA81DB /* Depacketizer.swift */; };
+		82666EBD2FD98C7500CA81DB /* Packetizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666EB02FD98C7400CA81DB /* Packetizer.swift */; };
+		82666EBE2FD98C7500CA81DB /* WireProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666EB12FD98C7400CA81DB /* WireProtocol.swift */; };
+		82666EC42FD98CE900CA81DB /* VideoEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666EC22FD98CE900CA81DB /* VideoEncoder.swift */; };
+		82666EC52FD98CE900CA81DB /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666EC02FD98CE900CA81DB /* SampleHandler.swift */; };
+		82666EC62FD98CE900CA81DB /* MemoryGuard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666EBF2FD98CE900CA81DB /* MemoryGuard.swift */; };
+		82666EC72FD98CE900CA81DB /* StreamSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666EC12FD98CE900CA81DB /* StreamSender.swift */; };
+		82666ECD2FD98D9400CA81DB /* MetalPipeHostApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666ECB2FD98D9400CA81DB /* MetalPipeHostApp.swift */; };
+		82666ED52FD98DB100CA81DB /* StreamListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666ED12FD98DB100CA81DB /* StreamListener.swift */; };
+		82666ED62FD98DB100CA81DB /* MetalPipeReceiverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666ECE2FD98DB100CA81DB /* MetalPipeReceiverApp.swift */; };
+		82666ED72FD98DB100CA81DB /* VideoRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666ED32FD98DB100CA81DB /* VideoRenderer.swift */; };
+		82666ED82FD98DB100CA81DB /* VideoDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666ED22FD98DB100CA81DB /* VideoDecoder.swift */; };
+		82666ED92FD98DB100CA81DB /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 82666ED02FD98DB100CA81DB /* Shaders.metal */; };
+		82666EDA2FD98DB100CA81DB /* ReceiverPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82666ECF2FD98DB100CA81DB /* ReceiverPipeline.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		82666EA62FD9872500CA81DB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 82666E752FD985FF00CA81DB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 82666E9D2FD9872400CA81DB;
+			remoteInfo = BroadcastExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		82666EAD2FD9872500CA81DB /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				82666EA82FD9872500CA81DB /* BroadcastExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		82666E7D2FD985FF00CA81DB /* MetalPipeReceiver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalPipeReceiver.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		82666E8F2FD9866400CA81DB /* MetalPipeHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalPipeHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		82666E9E2FD9872400CA81DB /* BroadcastExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BroadcastExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		82666EA02FD9872400CA81DB /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
+		82666EAE2FD98C7400CA81DB /* Depacketizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Depacketizer.swift; sourceTree = "<group>"; };
+		82666EAF2FD98C7400CA81DB /* MetalPipeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalPipeConfig.swift; sourceTree = "<group>"; };
+		82666EB02FD98C7400CA81DB /* Packetizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packetizer.swift; sourceTree = "<group>"; };
+		82666EB12FD98C7400CA81DB /* WireProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WireProtocol.swift; sourceTree = "<group>"; };
+		82666EBF2FD98CE900CA81DB /* MemoryGuard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryGuard.swift; sourceTree = "<group>"; };
+		82666EC02FD98CE900CA81DB /* SampleHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHandler.swift; sourceTree = "<group>"; };
+		82666EC12FD98CE900CA81DB /* StreamSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamSender.swift; sourceTree = "<group>"; };
+		82666EC22FD98CE900CA81DB /* VideoEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEncoder.swift; sourceTree = "<group>"; };
+		82666ECB2FD98D9400CA81DB /* MetalPipeHostApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalPipeHostApp.swift; sourceTree = "<group>"; };
+		82666ECE2FD98DB100CA81DB /* MetalPipeReceiverApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalPipeReceiverApp.swift; sourceTree = "<group>"; };
+		82666ECF2FD98DB100CA81DB /* ReceiverPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiverPipeline.swift; sourceTree = "<group>"; };
+		82666ED02FD98DB100CA81DB /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		82666ED12FD98DB100CA81DB /* StreamListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamListener.swift; sourceTree = "<group>"; };
+		82666ED22FD98DB100CA81DB /* VideoDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDecoder.swift; sourceTree = "<group>"; };
+		82666ED32FD98DB100CA81DB /* VideoRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRenderer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		82666EA92FD9872500CA81DB /* Exceptions for "BroadcastExtension" folder in "BroadcastExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 82666E9D2FD9872400CA81DB /* BroadcastExtension */;
+		};
+		82666EDC2FD99F5F00CA81DB /* Exceptions for "MetalPipeHost" folder in "MetalPipeHost" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 82666E8E2FD9866400CA81DB /* MetalPipeHost */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		82666E7F2FD985FF00CA81DB /* MetalPipeReceiver */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = MetalPipeReceiver;
+			sourceTree = "<group>";
+		};
+		82666E902FD9866400CA81DB /* MetalPipeHost */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				82666EDC2FD99F5F00CA81DB /* Exceptions for "MetalPipeHost" folder in "MetalPipeHost" target */,
+			);
+			path = MetalPipeHost;
+			sourceTree = "<group>";
+		};
+		82666EA22FD9872500CA81DB /* BroadcastExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				82666EA92FD9872500CA81DB /* Exceptions for "BroadcastExtension" folder in "BroadcastExtension" target */,
+			);
+			path = BroadcastExtension;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -26,14 +129,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		82666E8C2FD9866400CA81DB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		82666E9B2FD9872400CA81DB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				82666EA12FD9872500CA81DB /* ReplayKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		82666E742FD985FF00CA81DB = {
 			isa = PBXGroup;
 			children = (
+				82666EC32FD98CE900CA81DB /* BroadcastExtension 2 */,
 				82666E7F2FD985FF00CA81DB /* MetalPipeReceiver */,
+				82666E902FD9866400CA81DB /* MetalPipeHost */,
+				82666EA22FD9872500CA81DB /* BroadcastExtension */,
+				82666E9F2FD9872400CA81DB /* Frameworks */,
 				82666E7E2FD985FF00CA81DB /* Products */,
+				82666EB22FD98C7400CA81DB /* MetalPipeKit */,
+				82666ECC2FD98D9400CA81DB /* HostApp */,
+				82666ED42FD98DB100CA81DB /* MacReceiver */,
 			);
 			sourceTree = "<group>";
 		};
@@ -41,8 +166,61 @@
 			isa = PBXGroup;
 			children = (
 				82666E7D2FD985FF00CA81DB /* MetalPipeReceiver.app */,
+				82666E8F2FD9866400CA81DB /* MetalPipeHost.app */,
+				82666E9E2FD9872400CA81DB /* BroadcastExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		82666E9F2FD9872400CA81DB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				82666EA02FD9872400CA81DB /* ReplayKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		82666EB22FD98C7400CA81DB /* MetalPipeKit */ = {
+			isa = PBXGroup;
+			children = (
+				82666EAE2FD98C7400CA81DB /* Depacketizer.swift */,
+				82666EAF2FD98C7400CA81DB /* MetalPipeConfig.swift */,
+				82666EB02FD98C7400CA81DB /* Packetizer.swift */,
+				82666EB12FD98C7400CA81DB /* WireProtocol.swift */,
+			);
+			path = MetalPipeKit;
+			sourceTree = "<group>";
+		};
+		82666EC32FD98CE900CA81DB /* BroadcastExtension 2 */ = {
+			isa = PBXGroup;
+			children = (
+				82666EBF2FD98CE900CA81DB /* MemoryGuard.swift */,
+				82666EC02FD98CE900CA81DB /* SampleHandler.swift */,
+				82666EC12FD98CE900CA81DB /* StreamSender.swift */,
+				82666EC22FD98CE900CA81DB /* VideoEncoder.swift */,
+			);
+			path = "BroadcastExtension 2";
+			sourceTree = "<group>";
+		};
+		82666ECC2FD98D9400CA81DB /* HostApp */ = {
+			isa = PBXGroup;
+			children = (
+				82666ECB2FD98D9400CA81DB /* MetalPipeHostApp.swift */,
+			);
+			path = HostApp;
+			sourceTree = "<group>";
+		};
+		82666ED42FD98DB100CA81DB /* MacReceiver */ = {
+			isa = PBXGroup;
+			children = (
+				82666ECE2FD98DB100CA81DB /* MetalPipeReceiverApp.swift */,
+				82666ECF2FD98DB100CA81DB /* ReceiverPipeline.swift */,
+				82666ED02FD98DB100CA81DB /* Shaders.metal */,
+				82666ED12FD98DB100CA81DB /* StreamListener.swift */,
+				82666ED22FD98DB100CA81DB /* VideoDecoder.swift */,
+				82666ED32FD98DB100CA81DB /* VideoRenderer.swift */,
+			);
+			path = MacReceiver;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -70,6 +248,52 @@
 			productReference = 82666E7D2FD985FF00CA81DB /* MetalPipeReceiver.app */;
 			productType = "com.apple.product-type.application";
 		};
+		82666E8E2FD9866400CA81DB /* MetalPipeHost */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 82666E972FD9866600CA81DB /* Build configuration list for PBXNativeTarget "MetalPipeHost" */;
+			buildPhases = (
+				82666E8B2FD9866400CA81DB /* Sources */,
+				82666E8C2FD9866400CA81DB /* Frameworks */,
+				82666E8D2FD9866400CA81DB /* Resources */,
+				82666EAD2FD9872500CA81DB /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				82666EA72FD9872500CA81DB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				82666E902FD9866400CA81DB /* MetalPipeHost */,
+			);
+			name = MetalPipeHost;
+			packageProductDependencies = (
+			);
+			productName = MetalPipeHost;
+			productReference = 82666E8F2FD9866400CA81DB /* MetalPipeHost.app */;
+			productType = "com.apple.product-type.application";
+		};
+		82666E9D2FD9872400CA81DB /* BroadcastExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 82666EAA2FD9872500CA81DB /* Build configuration list for PBXNativeTarget "BroadcastExtension" */;
+			buildPhases = (
+				82666E9A2FD9872400CA81DB /* Sources */,
+				82666E9B2FD9872400CA81DB /* Frameworks */,
+				82666E9C2FD9872400CA81DB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				82666EA22FD9872500CA81DB /* BroadcastExtension */,
+			);
+			name = BroadcastExtension;
+			packageProductDependencies = (
+			);
+			productName = BroadcastExtension;
+			productReference = 82666E9E2FD9872400CA81DB /* BroadcastExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -81,6 +305,12 @@
 				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					82666E7C2FD985FF00CA81DB = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					82666E8E2FD9866400CA81DB = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					82666E9D2FD9872400CA81DB = {
 						CreatedOnToolsVersion = 26.2;
 					};
 				};
@@ -100,12 +330,28 @@
 			projectRoot = "";
 			targets = (
 				82666E7C2FD985FF00CA81DB /* MetalPipeReceiver */,
+				82666E8E2FD9866400CA81DB /* MetalPipeHost */,
+				82666E9D2FD9872400CA81DB /* BroadcastExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		82666E7B2FD985FF00CA81DB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		82666E8D2FD9866400CA81DB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		82666E9C2FD9872400CA81DB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -119,10 +365,55 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82666EB72FD98C7500CA81DB /* MetalPipeConfig.swift in Sources */,
+				82666EB82FD98C7500CA81DB /* Depacketizer.swift in Sources */,
+				82666ED52FD98DB100CA81DB /* StreamListener.swift in Sources */,
+				82666ED62FD98DB100CA81DB /* MetalPipeReceiverApp.swift in Sources */,
+				82666ED72FD98DB100CA81DB /* VideoRenderer.swift in Sources */,
+				82666ED82FD98DB100CA81DB /* VideoDecoder.swift in Sources */,
+				82666ED92FD98DB100CA81DB /* Shaders.metal in Sources */,
+				82666EDA2FD98DB100CA81DB /* ReceiverPipeline.swift in Sources */,
+				82666EB92FD98C7500CA81DB /* Packetizer.swift in Sources */,
+				82666EBA2FD98C7500CA81DB /* WireProtocol.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		82666E8B2FD9866400CA81DB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				82666EBB2FD98C7500CA81DB /* MetalPipeConfig.swift in Sources */,
+				82666EBC2FD98C7500CA81DB /* Depacketizer.swift in Sources */,
+				82666EBD2FD98C7500CA81DB /* Packetizer.swift in Sources */,
+				82666ECD2FD98D9400CA81DB /* MetalPipeHostApp.swift in Sources */,
+				82666EBE2FD98C7500CA81DB /* WireProtocol.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		82666E9A2FD9872400CA81DB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				82666EB32FD98C7500CA81DB /* MetalPipeConfig.swift in Sources */,
+				82666EB42FD98C7500CA81DB /* Depacketizer.swift in Sources */,
+				82666EC42FD98CE900CA81DB /* VideoEncoder.swift in Sources */,
+				82666EC52FD98CE900CA81DB /* SampleHandler.swift in Sources */,
+				82666EC62FD98CE900CA81DB /* MemoryGuard.swift in Sources */,
+				82666EC72FD98CE900CA81DB /* StreamSender.swift in Sources */,
+				82666EB52FD98C7500CA81DB /* Packetizer.swift in Sources */,
+				82666EB62FD98C7500CA81DB /* WireProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		82666EA72FD9872500CA81DB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 82666E9D2FD9872400CA81DB /* BroadcastExtension */;
+			targetProxy = 82666EA62FD9872500CA81DB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		82666E862FD9860100CA81DB /* Debug */ = {
@@ -251,8 +542,19 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V3HS28LN4A;
 				ENABLE_APP_SANDBOX = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -281,8 +583,19 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V3HS28LN4A;
 				ENABLE_APP_SANDBOX = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -303,6 +616,142 @@
 			};
 			name = Release;
 		};
+		82666E982FD9866600CA81DB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V3HS28LN4A;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MetalPipeHost/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "MetalPipe streams your screen to the receiver app on your Mac over the local network.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anuj.iitr.MetalPipeHost;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		82666E992FD9866600CA81DB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V3HS28LN4A;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MetalPipeHost/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "MetalPipe streams your screen to the receiver app on your Mac over the local network.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anuj.iitr.MetalPipeHost;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		82666EAB2FD9872500CA81DB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V3HS28LN4A;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BroadcastExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "MetalPipe streams your screen to the receiver app on your Mac over the local network.";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anuj.iitr.MetalPipeHost.BroadcastExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		82666EAC2FD9872500CA81DB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V3HS28LN4A;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BroadcastExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "MetalPipe streams your screen to the receiver app on your Mac over the local network.";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anuj.iitr.MetalPipeHost.BroadcastExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -320,6 +769,24 @@
 			buildConfigurations = (
 				82666E892FD9860100CA81DB /* Debug */,
 				82666E8A2FD9860100CA81DB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		82666E972FD9866600CA81DB /* Build configuration list for PBXNativeTarget "MetalPipeHost" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				82666E982FD9866600CA81DB /* Debug */,
+				82666E992FD9866600CA81DB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		82666EAA2FD9872500CA81DB /* Build configuration list for PBXNativeTarget "BroadcastExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				82666EAB2FD9872500CA81DB /* Debug */,
+				82666EAC2FD9872500CA81DB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
